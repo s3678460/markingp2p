@@ -6,14 +6,14 @@ class NavBar extends Component {
     render() {
         return (
             <nav className="navbar navbar-light bg-light">
-                <a className="navbar-brand" >
+                <Link to="/" className="navbar-brand">
                     <img src={logo} width={30} height={30} className="d-inline-block align-top mr-2" alt="" />
-                <Link to="/">Marking Form</Link>
-                </a>
+                Marking Form
+                </Link>
                 <ul className="nav justify-content-end">
                     <li className="nav-item">
-                        <Link to="/login"> 
-                            <a className="nav-link active" >Admin Login</a>
+                        <Link to="/login" className="nav-live active">
+                            Admin Login 
                         </Link>
                     </li>
                     

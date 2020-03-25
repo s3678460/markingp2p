@@ -9,7 +9,7 @@ class Admin extends Component {
                 <section className="admin-form-section">
                 <form className="text-center  p-5" action="#!">
                     <p>
-                        <img src={logo} width={50} height={50}/>
+                        <img src={logo} width={50} height={50} alt="admin"/>
                     </p>
                     <p className="h4 mb-4">Sign in</p>
                     {/* Email */}
