@@ -21,7 +21,6 @@ router.get('/all', (req, res) => {
 
 
 //Post new Group
-
 router.post('/newgroup', (req, res) => {
     const newGroup = new Group({
         groupName: req.body.groupName,
@@ -30,6 +29,21 @@ router.post('/newgroup', (req, res) => {
     newGroup.save()
         .then(newgroup => res.json(newgroup))
         .catch(err => console.log(err));
+})
+
+//Delete a group
+router.delete('/:_id', (req, res)=>{
+    Group.findByIdAndRemove(req.params._id)
+    .then(removedGroup =>res.send(removedGroup))
+    .catch(err => res.status(404).json({msg: false}))
+})
+
+//Update a group
+router.put('/:_id', (req, res)=>{
+    var update = req.body
+    Group.findByIdAndUpdate(req.params._id,update)
+    .then(() => res.json({ update: true }))
+    .catch(err => res.status(404).json({ update: false }));
 })
 
 module.exports = router;

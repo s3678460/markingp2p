@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const groups = require('./routes/api/groups');
+const votes = require('./routes/api/votes')
 const path = require("path");
 const app = express();
 
@@ -31,6 +32,7 @@ app.get('/test', (req, res)=>{
 
 //Use Route
 app.use('/api/groups', groups)
+app.use('/api/votes', votes)
 
 const port = process.env.PORT || 5000
 
