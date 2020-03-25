@@ -1,0 +1,14 @@
+html {
+  height: 100%;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  min-height: 100%;  
+  padding: 0;
+  background-color: rgb(240,234,248);
+ 
+  font-family: 'Montserrat', sans-serif;
+  
+}
