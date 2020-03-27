@@ -24,6 +24,7 @@ export const addGroup = (groupData)=> dispatch =>{
         type: ADD_GROUP,
         payload: res.data
     }))
+    
     // .catch(err)
 }
 
