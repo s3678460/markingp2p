@@ -9,8 +9,8 @@ import AdminPage from '../AdminPage/AdminPage'
             <div>
                 <Switch>
                     <Route exact path="/" component={Form}/>
-                    <Route exact path="/login" component={Admin}/>
-                    <Route exact path="/admin" component={AdminPage}/>
+                    <Route path="/login" component={Admin}/>
+                    <Route path="/admin" component={AdminPage}/>
 
                     <Route component={Form}/>
                 </Switch>
