@@ -9,4 +9,6 @@ export const addVote = (voteData) => dispatch =>{
         type:ADD_VOTE,
         payload: res.data
     }))
+    alert('Submit Successfull')
+    window.location.reload(false)
 }

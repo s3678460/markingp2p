@@ -46,8 +46,9 @@ class Form extends Component {
             comment: this.state.comment
 
         }
-        console.log(voteData)
         this.props.addVote(voteData)
+        
+        
 
 
     }
