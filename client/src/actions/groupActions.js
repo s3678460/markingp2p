@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 import {
     GET_GROUPS,
     GET_GROUP,
@@ -8,12 +8,13 @@ import {
 } from './types';
 
 //add all group
-export const getGroups = () => dispatch => {
-    axios.get('/api/groups/all')
-        .then(res => dispatch({
-            type: GET_GROUPS,
-            payload: res.data
-        }))
+export const getGroups = () => async dispatch => {
+    const res = await axios.get('/api/groups/all')
+    dispatch({
+        type: GET_GROUPS,
+        payload: res.data
+    })
+    
 }
 
 //add a group
@@ -23,7 +24,7 @@ export const addGroup = (groupData)=> dispatch =>{
         type: ADD_GROUP,
         payload: res.data
     }))
-    .catch(err )
+    // .catch(err)
 }
 
 //update a group
