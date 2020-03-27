@@ -1,31 +1,115 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import './Form.css'
+import { getGroups } from '../../actions/groupActions';
+import { connect } from 'react-redux';
 class Form extends Component {
+    constructor() {
+        super();
+        this.state = {
+            voterNumber: "",
+            groupID: "",
+            groupName: "",
+            
+        };
+        this.onChange = this.onChange.bind(this);
+    }
+    componentDidMount() {
+        this.props.getGroups();
+    }
+
+    onChange(e) {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+    // selectGroup(groups){
+    //     return(
+    //         <div className="mt-5">
+    //             <label for="exampleFormControlSelect1">Select a group:</label>
+    //             <select className="form-control" id="exampleFormControlSelect1" name="groupName"
+    //                 value={this.state.groupName}
+    //                 placeholder="Select a group"
+    //                 onChange={this.onChange}>
+    //                 <option selected disabled>Group Name</option>
+    //                 {groups.map(group => (
+    //                     <option key={group.id}>
+    //                         {group.groupName}
+    //                     </option>
+
+    //                 ))}
+    //             </select>
+
+    //         </div>
+    //     )
+    // }
+
+
+
     render() {
+
+
+
+        const { groups } = this.props.groups;
+
+
+        const selectGroup = (
+            <div className="mt-5">
+                <label for="exampleFormControlSelect1">Select a group:</label>
+                <select className="form-control" id="exampleFormControlSelect1" name="groupName"
+                    value={this.state.groupName}
+                    placeholder="Select a group"
+                    onChange={this.onChange}>
+                    <option selected disabled>Group Name</option>
+                    {groups.map(group => (
+                        <option key={group.id}>
+                            {group.groupName}
+                        </option>
+
+                    ))}
+                </select>
+
+            </div>
+        )
+
+        const selectStudent = (
+            <div className="mt-5">
+                <label for="exampleFormControlSelect2">Select a student:</label>
+                {groups.filter(group => group.groupName === this.state.groupName).map(filterGroup => (
+                    <select className="form-control" id="exampleFormControlSelect2" >
+
+
+                        <option selected disabled>Student name</option>
+                        {filterGroup.students.map(student => (
+
+                            <option>{student.studentName} ({student.studentNumber})</option>
+                        ))}
+
+
+                    </select>
+                ))}
+
+            </div>
+        );
         return (
             <div className="wrapper">
 
                 <section className="form-section">
                     <form className="text-center  p-5">
-                        <h1>Network Programming - Bonus Task 2</h1>
+                        <h1>Network Programming - Bonus Task 2 </h1>
                         <div className="form-group">
                             <div className="mt-3">
                                 <label htmlFor="studentNumber">Your student number:</label>
                                 <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your student number" />
                             </div>
-                            <div className="mt-5">
-                            <label for="exampleFormControlSelect1">Select a group:</label>
-                            <select class="form-control" id="exampleFormControlSelect1">
-                                <option>Group 1</option>
-                                <option>Group 2</option>
-                                <option>Group 3</option>
-                                <option>Group 4</option>
-                                <option>Group 5</option>
-                            </select>
 
 
-                        </div>
+                            {Object.entries(groups).length !==0 ? selectGroup : ""}
+
+                            {this.state.groupName !== "" ? selectStudent : ""}
+
+
+
+
                         </div>
                         <div className="mt-5">
                             <label>Select a score you want to give to their presentation:</label>
@@ -91,4 +175,8 @@ class Form extends Component {
     }
 }
 
-export default Form;
+const mapStateToProps = (state) => ({
+    groups: state.groups
+})
+
+export default connect(mapStateToProps, { getGroups })(Form);
