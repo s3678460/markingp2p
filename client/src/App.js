@@ -7,14 +7,14 @@ class App extends Component {
   render() {
     return (
 
-      <div>
+      
         <Router>
           <NavBar />
-          <body className="container-fluid">
+          <div className="container-fluid">
             <RouterURL />
-          </body>
+          </div>
         </Router>
-      </div>
+      
 
 
     )

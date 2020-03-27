@@ -78,9 +78,8 @@ class Form extends Component {
     render() {
 
 
-
         const { defaultGroupName , groups } = this.props.groups;
-
+        
 
         const selectGroup = (
             <div className="mt-5">
@@ -105,14 +104,15 @@ class Form extends Component {
             return (
             <div className="mt-5">
                 <label htmlFor="exampleFormControlSelect2">Select a student:</label>
-                {groups.filter(group => group.groupName === name).map(filterGroup => (
-                    <select className="form-control" id="exampleFormControlSelect2"  
+                {groups.filter(group => group.groupName === name).map((filterGroup, index) => (
+                    <select key={index} className="form-control" id="exampleFormControlSelect2"  
                     name="studentNumber"   
                     onChange={this.onChange}
+                    defaultValue=""
                     >
 
 
-                        <option selected="Student Name" value="" disabled>Student name</option>
+                        <option value="" disabled>Student name</option>
                         {filterGroup.students.map(student => (
 
                             <option key={student.studentNumber}
@@ -128,13 +128,25 @@ class Form extends Component {
             </div>
             )
         };
+
+        const formGroup = () => {
+            return (
+                <>
+                {selectGroup}
+                {
+                    (this.state.groupName === "") ? selectStudent(defaultGroupName) : selectStudent(this.state.groupName)
+                }
+                </>
+
+            )
+        }
         return (
             <div className="wrapper">
 
                 <section className="form-section">
                     <form className="text-center  p-5" onSubmit={this.onSubmit}>
                         <h1>Network Programming - Bonus Task 2 </h1>
-                        <div className="form-group">
+                        <div className="form-group mb-">
                             <div className="mt-3">
                                 <label >Your student number:</label>
                                 <input type="text" 
@@ -147,12 +159,14 @@ class Form extends Component {
                                 />
                             </div>
 
-
-                            {selectGroup}
-                            {
-                                (this.state.groupName === "") ? selectStudent(defaultGroupName) : selectStudent(this.state.groupName)
+                            <div className="mt-3">
+                            {(Object.entries(groups).length === 0)
+                                ? (<div className="spinner-border" style={{width: '7rem', height: '7rem'}} role="status" aria-hidden="true"/>)
+                                : formGroup()
                             }
+                            </div>
 
+                            
 
 
 
