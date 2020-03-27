@@ -1,4 +1,4 @@
-import {GET_GROUPS} from "../actions/types"
+import {GET_GROUPS, DELETE_GROUP} from "../actions/types"
 
 const initialState = {
     groups:[],
@@ -10,6 +10,11 @@ export default function (state = initialState, action){
             return {
                 ...state,
                 groups: action.payload
+            }
+        case DELETE_GROUP:
+            return {
+                ...state,
+                groups: state.groups.filter(group => group._id !== action.payload)
             }
         default:
             return state;

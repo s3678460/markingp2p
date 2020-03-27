@@ -14,19 +14,25 @@ export const getGroups = () => async dispatch => {
         type: GET_GROUPS,
         payload: res.data
     })
-    
+
 }
 
 //add a group
-export const addGroup = (groupData)=> dispatch =>{
+export const addGroup = (groupData) => dispatch => {
     axios.post('/api/groups/newgroup', groupData)
-    .then(res => dispatch({
-        type: ADD_GROUP,
-        payload: res.data
-    }))
+        .then(res => dispatch({
+            type: ADD_GROUP,
+            payload: res.data
+        }))
     // .catch(err)
 }
 
-//update a group
-export const updateGroup = (id, editedGroup) => dispatch =>{
+//delete a group
+export const deleteGroup = (id) => dispatch => {
+    axios.delete(`/api/groups/${id}`)
+        .then(res => dispatch({
+            type: DELETE_GROUP,
+            payload: id
+        }))
+        .then(res => dispatch(getGroups()))
 }
