@@ -10,8 +10,7 @@ class Form extends Component {
             voterNumber: "",
             groupID: "",
             groupName: "",
-            student1: "",
-            student2: ""
+            
         };
         this.onChange = this.onChange.bind(this);
     }
@@ -23,6 +22,27 @@ class Form extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
+    // selectGroup(groups){
+    //     return(
+    //         <div className="mt-5">
+    //             <label for="exampleFormControlSelect1">Select a group:</label>
+    //             <select className="form-control" id="exampleFormControlSelect1" name="groupName"
+    //                 value={this.state.groupName}
+    //                 placeholder="Select a group"
+    //                 onChange={this.onChange}>
+    //                 <option selected disabled>Group Name</option>
+    //                 {groups.map(group => (
+    //                     <option key={group.id}>
+    //                         {group.groupName}
+    //                     </option>
+
+    //                 ))}
+    //             </select>
+
+    //         </div>
+    //     )
+    // }
+
 
 
     render() {
@@ -31,16 +51,37 @@ class Form extends Component {
 
         const { groups } = this.props.groups;
 
+
+        const selectGroup = (
+            <div className="mt-5">
+                <label for="exampleFormControlSelect1">Select a group:</label>
+                <select className="form-control" id="exampleFormControlSelect1" name="groupName"
+                    value={this.state.groupName}
+                    placeholder="Select a group"
+                    onChange={this.onChange}>
+                    <option selected disabled>Group Name</option>
+                    {groups.map(group => (
+                        <option key={group.id}>
+                            {group.groupName}
+                        </option>
+
+                    ))}
+                </select>
+
+            </div>
+        )
+
         const selectStudent = (
             <div className="mt-5">
                 <label for="exampleFormControlSelect2">Select a student:</label>
-                {groups.filter(group => group.groupName == this.state.groupName).map(filterGroup => (
+                {groups.filter(group => group.groupName === this.state.groupName).map(filterGroup => (
                     <select className="form-control" id="exampleFormControlSelect2" >
 
 
-
+                        <option selected disabled>Student name</option>
                         {filterGroup.students.map(student => (
-                            <option>{student.studentName}</option>
+
+                            <option>{student.studentName} ({student.studentNumber})</option>
                         ))}
 
 
@@ -61,26 +102,10 @@ class Form extends Component {
                                 <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your student number" />
                             </div>
 
-                            <div className="mt-5">
-                                <label for="exampleFormControlSelect1">Select a group:</label>
-                                <select className="form-control" id="exampleFormControlSelect1" name="groupName"
-                                    value={this.state.groupName}
-                                    placeholder="Select a group"
-                                    onChange={this.onChange}>
 
-                                    {groups.map(group => (
+                            {Object.entries(groups).length !==0 ? selectGroup : ""}
 
-                                        <option key={group.id}
-
-                                        >
-                                            {group.groupName}
-                                        </option>
-
-                                    ))}
-                                </select>
-
-                            </div>
-                            {this.state.groupName != "" ? selectStudent : ""}
+                            {this.state.groupName !== "" ? selectStudent : ""}
 
 
 
