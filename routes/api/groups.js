@@ -6,6 +6,7 @@ const router = express.Router();
 
 const Group = require('../../models/Group');
 
+const validateGroupInput = require('../../validations/group')
 
 //Test
 router.get('/', (req, res)=>{
@@ -22,6 +23,13 @@ router.get('/all', (req, res) => {
 
 //Post new Group
 router.post('/newgroup', (req, res) => {
+
+    const {isValid, errors} = validateGroupInput(req.body);
+
+    if(!isValid){
+        return res.status(400).json(errors);
+    }
+
     const newGroup = new Group({
         groupName: req.body.groupName,
         students: req.body.students

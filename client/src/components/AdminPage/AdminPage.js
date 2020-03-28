@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { getGroups, deleteGroup, addGroup } from "../../actions/groupActions"
+import classnames from 'classnames'
 
 class AdminPage extends Component {
     constructor(props) {
@@ -11,7 +12,8 @@ class AdminPage extends Component {
             studentName: '',
             studentName2: '',
             studentNumber: '',
-            studentNumber2: ''
+            studentNumber2: '',
+            errors:{}
         }
     }
     clearState() {
@@ -50,7 +52,7 @@ class AdminPage extends Component {
                 ]
             }
             this.props.addGroup(newGroup);
-            window.alert("Create Group Success !!!")
+            // window.alert("Create Group Success !!!")
             this.clearState();
         } else {
             const newGroup = {
@@ -71,6 +73,16 @@ class AdminPage extends Component {
             this.clearState();
         }
     }
+
+
+    componentWillReceiveProps(nextProps)  {
+        if (nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            })
+        }
+    }
+
     handleChange = (e) => {
         this.setState({
             isIndividual: e.target.value
@@ -78,7 +90,7 @@ class AdminPage extends Component {
     }
     render() {
         var { groups } = this.props.groups;
-
+        const {errors} = this.state;
         //render groups
         var renderGroups = groups.map((group, index) => {
             if (group.students.length === 1) {
@@ -168,13 +180,20 @@ class AdminPage extends Component {
                                                 <label htmlFor="groupName">Group Name</label>
                                                 <input
                                                     type="text"
-                                                    className="form-control"
+                                                    className={classnames("form-control",{
+                                                        "is-invalid":errors.groupName
+                                                    })}
                                                     id="groupName"
                                                     placeholder="Group Name"
                                                     name="groupName"
                                                     value={this.state.groupName}
                                                     onChange={this.onChange}
                                                 />
+                                                {errors.groupName && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.groupName}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="groupName">Student Name</label>
@@ -287,7 +306,8 @@ class AdminPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        groups: state.groups
+        groups: state.groups,
+        errors: state.errors
     }
 }
 

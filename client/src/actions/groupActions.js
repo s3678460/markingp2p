@@ -26,6 +26,10 @@ export const addGroup = (groupData) => dispatch => {
             payload: res.data
         }))
         .then(res => dispatch(getGroups()))
+        .catch(err => dispatch({
+            type:GET_ERRORS,
+            payload: err.response.data
+        }))
 
     // .catch(err)
 }
