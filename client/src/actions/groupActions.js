@@ -20,11 +20,12 @@ export const getGroups = () => async dispatch => {
 //add a group
 export const addGroup = (groupData) => dispatch => {
     axios.post('/api/groups/newgroup', groupData)
-    .then(res => dispatch({
-        type: ADD_GROUP,
-        payload: res.data
-    }))
-    
+        .then(res => dispatch({
+            type: ADD_GROUP,
+            payload: res.data
+        }))
+        .then(res => dispatch(getGroups()))
+
     // .catch(err)
 }
 

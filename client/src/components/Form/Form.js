@@ -113,7 +113,7 @@ class Form extends Component {
                     >
 
 
-                        <option value="" disabled>Student name</option>
+                        <option value="" disabled>Please choose a student....</option>
                         {filterGroup.students.map(student => (
 
                             <option key={student.studentNumber}
