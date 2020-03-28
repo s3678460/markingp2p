@@ -4,6 +4,8 @@ const router = express.Router();
 //Load model
 const Vote = require('../../models/Vote');
 
+// Load Validation
+const validateVoteInput = require('../../validations/vote')
 
 //Test
 router.get('/test', (req, res) => {
@@ -19,15 +21,33 @@ router.get('/all', (req, res) => {
 
 //Post new Vote
 router.post('/newvote', (req, res) => {
-    const newVote = new Vote({
-        studentNumber: req.body.studentNumber,
-        voterNumber: req.body.voterNumber,
-        score: req.body.score,
-        comment: req.body.comment
+
+    const {errors, isValid} = validateVoteInput(req.body)
+    if(!isValid){
+        return res.status(400).json(errors);
+    }
+
+    const scoreInt = parseInt(req.body.score);
+
+    Vote.findOne({voterNumber: req.body.voterNumber, studentNumber:req.body.studentNumber}).then(voted => {
+        if (voted){
+            errors.voterNumber = "You have already voted for this student"
+            return res.status(400).json(errors)
+        }
+        else{
+            const newVote = new Vote({
+                studentNumber: req.body.studentNumber,
+                voterNumber: req.body.voterNumber,
+                score: scoreInt,
+                comment: req.body.comment
+            })
+            newVote.save()
+                .then(newVote => res.json(newVote))
+                .catch(err => console.log(err))
+        }
     })
-    newVote.save()
-        .then(newVote => res.json(newVote))
-        .catch(err => console.log(err))
+
+    
 })
 //Delete a vote
 router.delete('/:_id', (req, res) => {

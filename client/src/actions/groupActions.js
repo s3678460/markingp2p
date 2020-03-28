@@ -4,7 +4,8 @@ import {
     GET_GROUP,
     DELETE_GROUP,
     ADD_GROUP,
-    UPDATE_GROUP
+    UPDATE_GROUP,
+    GET_ERRORS
 } from './types';
 
 //add all group
@@ -36,4 +37,28 @@ export const deleteGroup = (id) => dispatch => {
             payload: id
         }))
         .then(res => dispatch(getGroups()))
+}
+
+//Update student score in group
+
+export const updateScore = (id, updatedGroup) => dispatch => {
+    return new Promise((resolve,reject) => {
+        axios
+            .put(`api/groups/${id}`,updatedGroup)
+            .then (res => {
+                dispatch({
+                    type:UPDATE_GROUP,
+                    payload: res.data
+                })
+                resolve(true);
+            })
+            .then(res => dispatch(getGroups))
+            .catch(err => {
+                dispatch({
+                    type:GET_ERRORS,
+                    payload:err.response.data
+                })
+                resolve(false)
+            })
+    })
 }

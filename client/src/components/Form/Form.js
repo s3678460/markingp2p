@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import './Form.css'
-import { getGroups } from '../../actions/groupActions';
+import { getGroups , updateScore } from '../../actions/groupActions';
 import { addVote } from '../../actions/voteActions';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 class Form extends Component {
     constructor() {
         super();
@@ -13,7 +14,9 @@ class Form extends Component {
             groupName: "",
             studentNumber:"",
             score: "",
-            comment:""
+            comment:"",
+            errors:{},
+            scoreError:""
             
         };
         this.onChange = this.onChange.bind(this);
@@ -33,16 +36,25 @@ class Form extends Component {
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.errors){
+            this.setState({
+                errors: nextProps.errors
+            })
+        }
+    }
 
     
 
     onSubmit(e){
         e.preventDefault();
-        const scoreInt = parseInt(this.state.score)
+
+
+       
         const voteData = {
             voterNumber: this.state.voterNumber,
             studentNumber: this.state.studentNumber,
-            score: scoreInt,
+            score: this.state.score,
             comment: this.state.comment
 
         }
@@ -80,7 +92,7 @@ class Form extends Component {
 
 
         const { defaultGroupName , groups } = this.props.groups;
-        
+        const {errors} = this.state
 
         const selectGroup = (
             <div className="mt-5">
@@ -97,7 +109,7 @@ class Form extends Component {
 
                     ))}
                 </select>
-
+                
             </div>
         )
 
@@ -106,7 +118,9 @@ class Form extends Component {
             <div className="mt-5">
                 <label htmlFor="exampleFormControlSelect2">Select a student:</label>
                 {groups.filter(group => group.groupName === name).map((filterGroup, index) => (
-                    <select key={index} className="form-control" id="exampleFormControlSelect2"  
+                    <select key={index} className={classnames("form-control",{
+                        "is-invalid":errors.studentNumber
+                    })} id="exampleFormControlSelect2"  
                     name="studentNumber"   
                     onChange={this.onChange}
                     defaultValue=""
@@ -124,7 +138,13 @@ class Form extends Component {
 
 
                     </select>
+                    
                 ))}
+                {errors && (
+                    <div className="invalid-feedback">
+                        {errors.studentNumber}
+                    </div>
+                )}
 
             </div>
             )
@@ -151,13 +171,20 @@ class Form extends Component {
                             <div className="mt-3">
                                 <label >Your student number:</label>
                                 <input type="text" 
-                                className="form-control" 
+                                className={classnames("form-control",{
+                                    "is-invalid":errors.voterNumber
+                                })}
                                 id="exampleInputEmail1"
                                 placeholder="Enter your student number" 
                                 name="voterNumber" 
                                 value={this.state.voterNumber}
                                 onChange={this.onChange}
                                 />
+                                {errors.voterNumber && (
+                                    <div className="invalid-feedback">
+                                        {errors.voterNumber}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="mt-3">
@@ -172,8 +199,10 @@ class Form extends Component {
 
 
                         </div>
+                       
                         <div className="mt-5">
                             <label>Select a score you want to give to their presentation:</label>
+                          
                             <br />
                             <div className="form-check form-check-inline mr-4">
                                 <input className="form-check-input" type="radio" name="score" value="1" id="inlineRadio1" checked={this.state.score === "1"} onChange={this.handleOptionChange} />
@@ -215,7 +244,14 @@ class Form extends Component {
                                 <input className="form-check-input" type="radio"  value="10" id="inlineRadio10" checked={this.state.score === "10"} onChange={this.handleOptionChange} />
                                 <label className="form-check-label" htmlFor="inlineRadio10">10</label>
                             </div>
+                            {errors.score && (
+                                    <div className="invalid-score">
+                                        {errors.score}
+                                    </div>
+                                )}
+                           
                         </div>
+                       
 
 
                         <label className="mt-5">Comments (optional)</label>
@@ -237,7 +273,8 @@ class Form extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    groups: state.groups
+    groups: state.groups,
+    errors: state.errors
 })
 
 export default connect(mapStateToProps, { getGroups, addVote })(Form);
