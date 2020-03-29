@@ -3,6 +3,7 @@ import logo from '../../library/google-form.svg'
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from "react-redux";
 import { removeUserStatus } from "../../actions/userStatusActions";
+import './NavBar.css'
 
 class NavBar extends Component {
     constructor(props) {
@@ -41,10 +42,10 @@ class NavBar extends Component {
                 </Link>
                     <ul className="nav justify-content-end">
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {adminData.userID} <i className="fa fa-user" aria-hidden="true" />
+                            <a className="nav-link dropdown "  href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {adminData.userID} <i className="fa fa-user fa-2x ml-2" aria-hidden="true" />
                             </a>
-                            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <Link to="/admin" className="dropdown-item">Group Manager</Link>
                                 <div className="dropdown-divider" />
                                 <a onClick={this.logOut} className="dropdown-item">Logout</a>
