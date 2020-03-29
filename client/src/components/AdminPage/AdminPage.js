@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { getGroups, deleteGroup, addGroup } from "../../actions/groupActions"
+import { getVotes } from "../../actions/voteActions"
 import classnames from 'classnames'
 import { Redirect } from "react-router-dom";
 
@@ -14,8 +15,8 @@ class AdminPage extends Component {
             studentName2: '',
             studentNumber: '',
             studentNumber2: '',
-            errors:{},
-           
+            errors: {},
+
 
         }
     }
@@ -30,7 +31,7 @@ class AdminPage extends Component {
         })
     }
 
-    
+
     onDelete(id) {
         if (window.confirm('Do want to delete this group ?')) {
             this.props.deleteGroup(id);
@@ -43,6 +44,7 @@ class AdminPage extends Component {
     }
     componentDidMount() {
         this.props.getGroups();
+        this.props.getVotes();
     }
     onSubmit = (e) => {
         e.preventDefault();
@@ -57,7 +59,7 @@ class AdminPage extends Component {
                 ]
             }
             this.props.addGroup(newGroup);
-            
+
         } else {
             const newGroup = {
                 groupName: this.state.groupName,
@@ -73,12 +75,12 @@ class AdminPage extends Component {
                 ]
             }
             this.props.addGroup(newGroup);
-            
+
         }
     }
 
 
-    componentWillReceiveProps(nextProps)  {
+    componentWillReceiveProps(nextProps) {
         if (nextProps.errors) {
             this.setState({
                 errors: nextProps.errors
@@ -92,16 +94,28 @@ class AdminPage extends Component {
         })
     }
 
-   
+
     render() {
-        if(!window.localStorage.getItem('adminData')){
-            return <Redirect to="/login"/>
+        if (!window.localStorage.getItem('adminData')) {
+            return <Redirect to="/login" />
         }
         var { groups } = this.props.groups;
-        const {errors} = this.state;
+        var { votes } = this.props.votes
+        const { errors } = this.state;
+        
+
         //render groups
         var renderGroups = groups.map((group, index) => {
             if (group.students.length === 1) {
+                //get total vote
+                var totalStudentVote = 0;
+                for (let index = 0; index < group.students.length; index++) {
+                    votes.forEach(vote => {
+                        if(vote.studentNumber === group.students[index].studentNumber){
+                            totalStudentVote += 1;
+                        }
+                    });
+                }
                 return <div key={index} className="py-5">
                     {/* per group */}
                     <h1>{group.groupName}</h1>
@@ -111,6 +125,8 @@ class AdminPage extends Component {
                                 <th scope="col">Student Name</th>
                                 <th scope="col">Student Number</th>
                                 <th scope="col">Score</th>
+                                <th scope="col">Total Vote</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -118,6 +134,7 @@ class AdminPage extends Component {
                                 <td>{group.students[0].studentName}</td>
                                 <td>{group.students[0].studentNumber}</td>
                                 <td>{group.students[0].studentScore}</td>
+                                <td>{totalStudentVote}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -127,6 +144,29 @@ class AdminPage extends Component {
                     >Delete</button>
                 </div>
             } else {
+                //get total vote
+                var totalStudentVote = [0,0];
+
+                for (let index = 0; index < group.students.length; index++) {
+                    votes.forEach(vote => {
+                        if(vote.studentNumber === group.students[index].studentNumber){
+                            totalStudentVote[index] += 1;
+                        }
+                    });
+                    // if(index = 0){
+                    //     votes.forEach(vote => {
+                    //         if(vote.studentNumber === group.students[index]){
+                    //             totolStudent1Vote += 1;
+                    //         }
+                    //     });
+                    // }else{
+                    //     votes.forEach(vote => {
+                    //         if(vote.studentNumber === group.students[index]){
+                    //             totolStudent2Vote += 1;
+                    //         }
+                    //     });
+                    // }
+                }
                 return <div className="py-5">
                     {/* per group */}
                     <h1>{group.groupName}</h1>
@@ -136,6 +176,7 @@ class AdminPage extends Component {
                                 <th scope="col">Student Name</th>
                                 <th scope="col">Student Number</th>
                                 <th scope="col">Score</th>
+                                <th scope="col">Total Vote</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -143,11 +184,13 @@ class AdminPage extends Component {
                                 <td>{group.students[0].studentName}</td>
                                 <td>{group.students[0].studentNumber}</td>
                                 <td>{group.students[0].studentScore}</td>
+                                <td>{totalStudentVote[0]}</td>
                             </tr>
                             <tr>
                                 <td>{group.students[1].studentName}</td>
                                 <td>{group.students[1].studentNumber}</td>
                                 <td>{group.students[1].studentScore}</td>
+                                <td>{totalStudentVote[1]}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -188,8 +231,8 @@ class AdminPage extends Component {
                                                 <label htmlFor="groupName">Group Name</label>
                                                 <input
                                                     type="text"
-                                                    className={classnames("form-control",{
-                                                        "is-invalid":errors.groupName
+                                                    className={classnames("form-control", {
+                                                        "is-invalid": errors.groupName
                                                     })}
                                                     id="groupName"
                                                     placeholder="Group Name"
@@ -207,8 +250,8 @@ class AdminPage extends Component {
                                                 <label htmlFor="groupName">Student Name</label>
                                                 <input
                                                     type="text"
-                                                    className={classnames("form-control",{
-                                                        "is-invalid":errors.studentName
+                                                    className={classnames("form-control", {
+                                                        "is-invalid": errors.studentName
                                                     })}
                                                     id="studentName"
                                                     placeholder="Student Name"
@@ -226,8 +269,8 @@ class AdminPage extends Component {
                                                 <label htmlFor="groupName">Student Number</label>
                                                 <input
                                                     type="text"
-                                                    className={classnames("form-control",{
-                                                        "is-invalid":errors.studentNumber
+                                                    className={classnames("form-control", {
+                                                        "is-invalid": errors.studentNumber
                                                     })}
                                                     id="studentNumber"
                                                     placeholder="Student Number"
@@ -250,8 +293,8 @@ class AdminPage extends Component {
                                                 <label htmlFor="groupName">Group Name</label>
                                                 <input
                                                     type="text"
-                                                    className={classnames("form-control",{
-                                                        "is-invalid":errors.groupName
+                                                    className={classnames("form-control", {
+                                                        "is-invalid": errors.groupName
                                                     })}
                                                     id="groupName"
                                                     placeholder="Group Name"
@@ -269,9 +312,9 @@ class AdminPage extends Component {
                                                 <label htmlFor="groupName">First Student Name</label>
                                                 <input
                                                     type="text"
-                                                    className={classnames("form-control",{
-                                                        "is-invalid":errors.studentName
-                                                    })}                                                    id="studentName"
+                                                    className={classnames("form-control", {
+                                                        "is-invalid": errors.studentName
+                                                    })} id="studentName"
                                                     placeholder="Student Name"
                                                     name="studentName"
                                                     value={this.state.studentName}
@@ -288,9 +331,9 @@ class AdminPage extends Component {
                                                 <label htmlFor="groupName">First Student Number</label>
                                                 <input
                                                     type="text"
-                                                    className={classnames("form-control",{
-                                                        "is-invalid":errors.studentNumber
-                                                    })}                                                    id="studentNumber"
+                                                    className={classnames("form-control", {
+                                                        "is-invalid": errors.studentNumber
+                                                    })} id="studentNumber"
                                                     placeholder="Student Number"
                                                     name="studentNumber"
                                                     value={this.state.studentNumber}
@@ -306,9 +349,9 @@ class AdminPage extends Component {
                                                 <label htmlFor="groupName">Second Student Name</label>
                                                 <input
                                                     type="text"
-                                                    className={classnames("form-control",{
-                                                        "is-invalid":errors.studentName2
-                                                    })}                                                     id="studentName2"
+                                                    className={classnames("form-control", {
+                                                        "is-invalid": errors.studentName2
+                                                    })} id="studentName2"
                                                     placeholder="Student Name 2"
                                                     name="studentName2"
                                                     value={this.state.studentName2}
@@ -324,15 +367,15 @@ class AdminPage extends Component {
                                                 <label htmlFor="groupName">Second Student Number</label>
                                                 <input
                                                     type="text"
-                                                    className={classnames("form-control",{
-                                                        "is-invalid":errors.studentNumber2
-                                                    })}                                                       id="studentNumber2"
+                                                    className={classnames("form-control", {
+                                                        "is-invalid": errors.studentNumber2
+                                                    })} id="studentNumber2"
                                                     placeholder="Student Number2"
                                                     name="studentNumber2"
                                                     value={this.state.studentNumber2}
                                                     onChange={this.onChange}
                                                 />
-                                                 {errors.studentNumber2 && (
+                                                {errors.studentNumber2 && (
                                                     <div className="invalid-feedback">
                                                         {errors.studentNumber2}
                                                     </div>
@@ -361,8 +404,9 @@ class AdminPage extends Component {
 const mapStateToProps = (state) => {
     return {
         groups: state.groups,
-        errors: state.errors
+        errors: state.errors,
+        votes: state.votes
     }
 }
 
-export default connect(mapStateToProps, { getGroups, deleteGroup, addGroup })(AdminPage);
+export default connect(mapStateToProps, { getGroups, deleteGroup, addGroup, getVotes })(AdminPage);
