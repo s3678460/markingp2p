@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import './Admin.css'
 import logo from '../../library/admin-logo.png'
+import {setUserStatus} from "../../actions/userStatusActions";
+import { connect } from "react-redux";
 class Admin extends Component {
     constructor() {
         super();
@@ -24,8 +26,13 @@ class Admin extends Component {
         }
 
         if (userData.userID === "admin" && userData.userPassword === "admin") {
+            //set local storage
+            window.localStorage.setItem("adminData", JSON.stringify(userData))
             window.alert("Login successful!!!")
+            this.props.setUserStatus(true);
             history.push('/admin')
+        }else if(userData.userID === "" || userData.userPassword === ""){
+            window.alert("Username or password can not be blank!!!!!!!")
         } else {
             window.alert("Username or password is wrong!!!!")
         }
@@ -68,4 +75,4 @@ class Admin extends Component {
     }
 }
 
-export default Admin;
+export default connect(null,{setUserStatus})(Admin);

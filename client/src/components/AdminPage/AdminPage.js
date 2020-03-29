@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { getGroups, deleteGroup, addGroup } from "../../actions/groupActions"
 import classnames from 'classnames'
+import { Redirect } from "react-router-dom";
 
 class AdminPage extends Component {
     constructor(props) {
@@ -89,6 +90,9 @@ class AdminPage extends Component {
         })
     }
     render() {
+        if(!window.localStorage.getItem('adminData')){
+            return <Redirect to="/login"/>
+        }
         var { groups } = this.props.groups;
         const {errors} = this.state;
         //render groups
@@ -288,7 +292,6 @@ class AdminPage extends Component {
                                                 <button type="submit" className="btn btn-primary mx-2">Create</button>
                                             </div>
                                         </form>)}
-
                                 </div>
                             </div>
                         </div>
