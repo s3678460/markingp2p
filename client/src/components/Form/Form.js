@@ -71,13 +71,11 @@ class Form extends Component {
 
         const updateData = {
             groupName: this.state.groupName,
-            students: [
-                {
-                    studentScore: scoreInt,
-                    studentName: "Minh",
-                    studentNumber: this.state.studentNumber
-                }
-            ]
+            studentScore: scoreInt,
+            studentNumber: this.state.studentNumber
+
+
+           
         }
         console.log(updateData)
         this.props.updateScore(updateData)

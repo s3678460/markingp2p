@@ -59,9 +59,24 @@ router.delete('/:_id', (req, res)=>{
 //Update a group
 router.put('/update', (req, res)=>{
     // var update = req.body
-    console.log("This is update body", req.body)
-    Group.findOneAndUpdate({groupName: "Oasis"},req.body)
-    
+    const newScore = req.body.studentScore
+    const groupName = req.body.groupName
+    const studentNumber = req.body.studentNumber
+   
+    Group.findOneAndUpdate(
+        {groupName: groupName},
+        {studentScore: newScore},
+        {fields:
+            {
+                students:
+                {
+                    $elemMatch:{
+                        studentNumber: studentNumber,
+                        
+                    }
+                }
+        }}
+    )
     // Group.findByIdAndUpdate(req.params._id,update)
     .then((group) => res.json(group))
     .catch(err => res.status(404).json({ update: false }));
