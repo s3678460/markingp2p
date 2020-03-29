@@ -65,21 +65,25 @@ router.put('/update', (req, res)=>{
    
     Group.findOneAndUpdate(
         {groupName: groupName},
-        {studentScore: newScore},
-        {fields:
-            {
-                students:
-                {
-                    $elemMatch:{
-                        studentNumber: studentNumber,
-                        
-                    }
-                }
-        }}
+        {$set: {"students.$[elem].studentScore": newScore}},
+        {arrayFilters:[{
+            "elem.studentNumber": studentNumber
+        }],
+        new:true
+    }
     )
-    // Group.findByIdAndUpdate(req.params._id,update)
-    .then((group) => res.json(group))
-    .catch(err => res.status(404).json({ update: false }));
+    .exec((err,doc) => {
+        doc.students.forEach((elem)=>{
+            if(elem.studentNumber == studentNumber){
+                if (elem.studentScore === newScore){
+                    return res.send('sucess'); 
+                  }
+                  return res.send('incorrect');
+
+            }
+        })
+    })
+    
 })
 
 module.exports = router;
