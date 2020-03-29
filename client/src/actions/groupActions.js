@@ -21,10 +21,15 @@ export const getGroups = () => async dispatch => {
 //add a group
 export const addGroup = (groupData) => dispatch => {
     axios.post('/api/groups/newgroup', groupData)
-        .then(res => dispatch({
-            type: ADD_GROUP,
-            payload: res.data
-        }))
+        .then(res => {
+            dispatch({
+                type: ADD_GROUP,
+                payload: res.data
+            })
+        alert('Add group successfull')
+        window.location.reload(false)
+        }
+        )
         .then(res => dispatch(getGroups()))
         .catch(err => dispatch({
             type:GET_ERRORS,
@@ -46,10 +51,10 @@ export const deleteGroup = (id) => dispatch => {
 
 //Update student score in group
 
-export const updateScore = (id, updatedGroup) => dispatch => {
+export const updateScore = (updatedGroup) => dispatch => {
     return new Promise((resolve,reject) => {
         axios
-            .put(`api/groups/${id}`,updatedGroup)
+            .put('api/groups/update',updatedGroup)
             .then (res => {
                 dispatch({
                     type:UPDATE_GROUP,

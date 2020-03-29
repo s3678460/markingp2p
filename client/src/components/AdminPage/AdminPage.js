@@ -14,7 +14,9 @@ class AdminPage extends Component {
             studentName2: '',
             studentNumber: '',
             studentNumber2: '',
-            errors:{}
+            errors:{},
+           
+
         }
     }
     clearState() {
@@ -27,6 +29,8 @@ class AdminPage extends Component {
             studentNumber2: ''
         })
     }
+
+    
     onDelete(id) {
         if (window.confirm('Do want to delete this group ?')) {
             this.props.deleteGroup(id);
@@ -53,8 +57,7 @@ class AdminPage extends Component {
                 ]
             }
             this.props.addGroup(newGroup);
-            // window.alert("Create Group Success !!!")
-            this.clearState();
+            
         } else {
             const newGroup = {
                 groupName: this.state.groupName,
@@ -70,8 +73,7 @@ class AdminPage extends Component {
                 ]
             }
             this.props.addGroup(newGroup);
-            window.alert("Create Group Success !!!")
-            this.clearState();
+            
         }
     }
 
@@ -89,6 +91,8 @@ class AdminPage extends Component {
             isIndividual: e.target.value
         })
     }
+
+   
     render() {
         if(!window.localStorage.getItem('adminData')){
             return <Redirect to="/login"/>
@@ -203,89 +207,136 @@ class AdminPage extends Component {
                                                 <label htmlFor="groupName">Student Name</label>
                                                 <input
                                                     type="text"
-                                                    className="form-control"
+                                                    className={classnames("form-control",{
+                                                        "is-invalid":errors.studentName
+                                                    })}
                                                     id="studentName"
                                                     placeholder="Student Name"
                                                     name="studentName"
                                                     value={this.state.studentName}
                                                     onChange={this.onChange}
                                                 />
+                                                {errors.studentName && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.studentName}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="groupName">Student Number</label>
                                                 <input
                                                     type="text"
-                                                    className="form-control"
+                                                    className={classnames("form-control",{
+                                                        "is-invalid":errors.studentNumber
+                                                    })}
                                                     id="studentNumber"
                                                     placeholder="Student Number"
                                                     name="studentNumber"
                                                     value={this.state.studentNumber}
                                                     onChange={this.onChange}
                                                 />
+                                                {errors.studentNumber && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.studentNumber}
+                                                    </div>
+                                                )}
                                             </div>
                                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                                             <button type="submit" className="btn btn-primary mx-2">Create</button>
                                         </form>)
+                                        // Group Add
                                         : (<form onSubmit={this.onSubmit}>
                                             <div className="form-group">
                                                 <label htmlFor="groupName">Group Name</label>
                                                 <input
                                                     type="text"
-                                                    className="form-control"
+                                                    className={classnames("form-control",{
+                                                        "is-invalid":errors.groupName
+                                                    })}
                                                     id="groupName"
                                                     placeholder="Group Name"
                                                     name="groupName"
                                                     value={this.state.groupName}
                                                     onChange={this.onChange}
                                                 />
+                                                {errors.studentNumber && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.studentNumber}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="groupName">First Student Name</label>
                                                 <input
                                                     type="text"
-                                                    className="form-control"
-                                                    id="studentName"
+                                                    className={classnames("form-control",{
+                                                        "is-invalid":errors.studentName
+                                                    })}                                                    id="studentName"
                                                     placeholder="Student Name"
                                                     name="studentName"
                                                     value={this.state.studentName}
                                                     onChange={this.onChange}
                                                 />
+                                                {errors.studentName && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.studentName}
+                                                    </div>
+                                                )}
+
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="groupName">First Student Number</label>
                                                 <input
                                                     type="text"
-                                                    className="form-control"
-                                                    id="studentNumber"
+                                                    className={classnames("form-control",{
+                                                        "is-invalid":errors.studentNumber
+                                                    })}                                                    id="studentNumber"
                                                     placeholder="Student Number"
                                                     name="studentNumber"
                                                     value={this.state.studentNumber}
                                                     onChange={this.onChange}
                                                 />
+                                                {errors.studentNumber && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.studentNumber}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="groupName">Second Student Name</label>
                                                 <input
                                                     type="text"
-                                                    className="form-control"
-                                                    id="studentName2"
+                                                    className={classnames("form-control",{
+                                                        "is-invalid":errors.studentName2
+                                                    })}                                                     id="studentName2"
                                                     placeholder="Student Name 2"
                                                     name="studentName2"
                                                     value={this.state.studentName2}
                                                     onChange={this.onChange}
                                                 />
+                                                {errors.studentName && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.studentName2}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="groupName">Second Student Number</label>
                                                 <input
                                                     type="text"
-                                                    className="form-control"
-                                                    id="studentNumber2"
+                                                    className={classnames("form-control",{
+                                                        "is-invalid":errors.studentNumber2
+                                                    })}                                                       id="studentNumber2"
                                                     placeholder="Student Number2"
                                                     name="studentNumber2"
                                                     value={this.state.studentNumber2}
                                                     onChange={this.onChange}
                                                 />
+                                                 {errors.studentNumber2 && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.studentNumber2}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div>
                                                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
