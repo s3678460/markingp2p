@@ -11,7 +11,7 @@ class Form extends Component {
         this.state = {
             voterNumber: "",
             groupID: "",
-            groupName: "Coldplay",
+            groupName: "Group 1",
             studentNumber:"",
             studentName:"",
             score: "",
