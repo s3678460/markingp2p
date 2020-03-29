@@ -16,3 +16,7 @@ export const UPDATE_VOTE = "UPDATE_VOTE";
 
 // Errors Types
 export const GET_ERRORS = "GET_ERRORS";
+
+//Status User
+
+export const SET_USER_STATUS = "SET_USER_STATUS"
