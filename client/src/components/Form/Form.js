@@ -11,14 +11,15 @@ class Form extends Component {
         this.state = {
             voterNumber: "",
             groupID: "",
-            groupName: "",
+            groupName: "Coldplay",
             studentNumber:"",
             studentName:"",
             score: "",
-            initialScore:9,
+            initialScore:0,
             comment:"",
             errors:{},
-            scoreError:""
+            scoreError:"",
+            addVote:false
             
             
         };
@@ -39,12 +40,20 @@ class Form extends Component {
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
+
+    
+
     componentWillReceiveProps(nextProps){
         if(nextProps.errors){
             this.setState({
                 errors: nextProps.errors
             })
         }
+    }
+
+    returnInitialScore = () => {
+        
+
     }
 
     
@@ -56,18 +65,39 @@ class Form extends Component {
             voterNumber: this.state.voterNumber,
             studentNumber: this.state.studentNumber,
             score: this.state.score,
-            
             comment: this.state.comment
 
         }
-        var scoreInt
-        if (this.state.initialScore === 0) {
-            scoreInt = parseInt(this.state.score) + this.state.initialScore
+        
+        
+        const {groups} = this.props.groups
+        var score
+        groups.forEach(group => {
+            if (group.groupName === this.state.groupName) {
+                group.students.forEach(attribute => {
+                    if (attribute.studentNumber === this.state.studentNumber) {
+                        
+                        score = attribute.studentScore
+                        
+                       
+                    }
+                })
+            }
+        });
+
+       
+
+
+        var scoreInt;
+
+        if (score === 0) {
+            scoreInt = parseInt(this.state.score) + score
         }
         else{
-            scoreInt = (parseInt(this.state.score) + this.state.initialScore)/2
+            scoreInt = (parseInt(this.state.score) + score)/2
 
         }
+
 
         const updateData = {
             groupName: this.state.groupName,
@@ -76,11 +106,13 @@ class Form extends Component {
 
 
            
-        }
-        console.log(updateData)
-        this.props.updateScore(updateData)
+        }           
+        
         this.props.addVote(voteData)
-       
+        
+        if (this.state.errors !== "" | null | undefined) {
+            this.props.updateScore(updateData)
+        }
         
         
 
@@ -146,6 +178,7 @@ class Form extends Component {
                     })} id="exampleFormControlSelect2"  
                     name="studentNumber"   
                     onChange={this.onChange}
+                    
                     defaultValue=""
                     >
 
@@ -155,6 +188,7 @@ class Form extends Component {
 
                             <option key={student.studentNumber}
                             value = {student.studentNumber}
+                            
 
                             >{student.studentName} ({student.studentNumber})</option>
                         ))}

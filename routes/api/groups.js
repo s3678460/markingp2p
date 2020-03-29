@@ -62,27 +62,22 @@ router.put('/update', (req, res)=>{
     const newScore = req.body.studentScore
     const groupName = req.body.groupName
     const studentNumber = req.body.studentNumber
+
    
+
     Group.findOneAndUpdate(
         {groupName: groupName},
-        {$set: {"students.$[elem].studentScore": newScore}},
+        {$set: {"students.$[elem].studentScore":newScore}},
         {arrayFilters:[{
             "elem.studentNumber": studentNumber
         }],
         new:true
     }
     )
-    .exec((err,doc) => {
-        doc.students.forEach((elem)=>{
-            if(elem.studentNumber == studentNumber){
-                if (elem.studentScore === newScore){
-                    return res.send('sucess'); 
-                  }
-                  return res.send('incorrect');
-
-            }
-        })
+    .then(student => {
+        res.json(student)
     })
+    .catch(err => res.status(404).json({ Get: "Fail" }))
     
 })
 
