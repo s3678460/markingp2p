@@ -13,10 +13,13 @@ class Form extends Component {
             groupID: "",
             groupName: "",
             studentNumber:"",
+            studentName:"",
             score: "",
+            initialScore:7,
             comment:"",
             errors:{},
             scoreError:""
+            
             
         };
         this.onChange = this.onChange.bind(this);
@@ -49,19 +52,38 @@ class Form extends Component {
     onSubmit(e){
         e.preventDefault();
 
-
-       
         const voteData = {
             voterNumber: this.state.voterNumber,
             studentNumber: this.state.studentNumber,
             score: this.state.score,
+            
             comment: this.state.comment
 
         }
-        this.props.addVote(voteData)
-        
-        
+        var scoreInt
+        if (this.state.initialScore === 0) {
+            scoreInt = parseInt(this.state.score) + this.state.initialScore
+        }
+        else{
+            scoreInt = (parseInt(this.state.score) + this.state.initialScore)/2
 
+        }
+        const updateData = {
+            groupName: "Noel",
+            students: [
+                {
+                    studentScore: scoreInt,
+                    studentName: "Khanh",
+                    studentNumber: this.state.studentNumber
+                }
+            ]
+        }
+        console.log(updateData)
+        this.props.updateScore(updateData)
+        this.props.addVote(voteData)
+       
+        
+        
 
     }
 
@@ -277,4 +299,4 @@ const mapStateToProps = (state) => ({
     errors: state.errors
 })
 
-export default connect(mapStateToProps, { getGroups, addVote })(Form);
+export default connect(mapStateToProps, { getGroups, addVote, updateScore })(Form);

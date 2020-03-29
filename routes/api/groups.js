@@ -16,8 +16,18 @@ router.get('/', (req, res)=>{
 //Get All Group
 router.get('/all', (req, res) => {
     Group.find()
-        .then(group => res.json(group))
-        .catch(err => res.status(500).json({ msg: "Get all group fail!!!" }))
+    .then(group => res.json(group))
+    .catch(err => res.status(500).json({ msg: "Get all group fail!!!" }))
+    // Group.find({students:{'$elemMatch':{studentName: "Khanh"}}}, function(err,student) {
+    //     if(err){
+    //         return res.status(400).json(err)
+    //     }
+    //     else{
+    //         return res.json(student)
+    //     }
+    // })
+        
+        // .catch(err => res.status(500).json({ msg: "Get all group fail!!!" }))
 })
 
 
@@ -47,9 +57,12 @@ router.delete('/:_id', (req, res)=>{
 })
 
 //Update a group
-router.put('/:_id', (req, res)=>{
+router.put('/update', (req, res)=>{
     var update = req.body
-    Group.findByIdAndUpdate(req.params._id,update)
+    console.log("This is update body", update)
+    Group.findOneAndUpdate({groupName: update.groupName})
+    
+    // Group.findByIdAndUpdate(req.params._id,update)
     .then(() => res.json({ update: true }))
     .catch(err => res.status(404).json({ update: false }));
 })
