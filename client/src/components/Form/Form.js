@@ -15,7 +15,7 @@ class Form extends Component {
             studentNumber:"",
             studentName:"",
             score: "",
-            initialScore:7,
+            initialScore:9,
             comment:"",
             errors:{},
             scoreError:""
@@ -68,12 +68,13 @@ class Form extends Component {
             scoreInt = (parseInt(this.state.score) + this.state.initialScore)/2
 
         }
+
         const updateData = {
-            groupName: "Noel",
+            groupName: this.state.groupName,
             students: [
                 {
                     studentScore: scoreInt,
-                    studentName: "Khanh",
+                    studentName: "Minh",
                     studentNumber: this.state.studentNumber
                 }
             ]
@@ -122,7 +123,9 @@ class Form extends Component {
                 <select className="form-control" id="exampleFormControlSelect1" name="groupName"
                     value={this.state.groupName}
                     placeholder="Select a group"
-                    onChange={this.onChange}>
+                    onChange={this.onChange}
+
+                    >
                     {/* <option selected disabled >Group Name</option> */}
                     {groups.map(group => (
                         <option key={group._id}>
